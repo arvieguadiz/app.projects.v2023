@@ -1,0 +1,15 @@
+@use '../abstracts/variables';
+
+@use '../abstracts/mixins/breakpoints';
+
+@use 'header/header';
+
+html {
+  body {
+    #app {
+      .container-main {
+        
+      }
+    }
+  }
+}

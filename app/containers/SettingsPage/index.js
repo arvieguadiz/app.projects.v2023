@@ -1,7 +1,6 @@
-/*
- * HomePage
+/**
  *
- * This is the first thing users see of our App, at the '/' route
+ * SettingsPage
  *
  */
 
@@ -14,23 +13,23 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 // import clsx from 'clsx';
 
-// import { useInjectSaga } from 'utils/injectSaga';
-// import { useInjectReducer } from 'utils/injectReducer';
-// import makeSelectHomePage from './selectors';
-// import reducer from './reducer';
-// import saga from './saga';
+import { useInjectSaga } from 'utils/injectSaga';
+import { useInjectReducer } from 'utils/injectReducer';
+import makeSelectSettingsPage from './selectors';
+import reducer from './reducer';
+import saga from './saga';
 import messages from './messages';
 
 import { changeActiveMenu } from '../Layouts/Drawer/actions';
 
 // import useStyles from './styles';
 
-export function HomePage({
+export function SettingsPage({
   dispatch,
   location,
 }) {
-  // useInjectReducer({ key: 'homePage', reducer });
-  // useInjectSaga({ key: 'homePage', saga });
+  useInjectReducer({ key: 'settingsPage', reducer });
+  useInjectSaga({ key: 'settingsPage', saga });
   
   // const classes = useStyles();
 
@@ -41,10 +40,10 @@ export function HomePage({
   return (
     <React.Fragment>
       <Helmet titleTemplate="%s | Arvie - Portfolio">
-        <title>Home</title>
-        <meta name="description" content="Description of HomePage" />
+        <title>Settings</title>
+        <meta name="description" content="Description of SettingsPage" />
       </Helmet>
-      
+
       <h1>
         <FormattedMessage {...messages.header} />
       </h1>
@@ -52,12 +51,12 @@ export function HomePage({
   );
 }
 
-HomePage.propTypes = {
+SettingsPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  // homePage: makeSelectHomePage(),
+  settingsPage: makeSelectSettingsPage(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -74,4 +73,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(HomePage);
+)(SettingsPage);
