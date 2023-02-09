@@ -6,18 +6,19 @@
 
 import React, { memo } from 'react';
 import {
-  Divider,
   Drawer as DrawerMui,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  useMediaQuery,
 } from '@material-ui/core';
 import {
   Apps as AppsIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  Close as CloseIcon,
   Home as HomeIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
@@ -63,28 +64,44 @@ export function Drawer({
   
   const classes = useStyles();
   const theme = useTheme();
+  const smallDevice = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
   return (
     <DrawerMui
-      variant="permanent"
-      className={clsx(classes.drawer, {
-        [classes.drawerOpen]: drawerState,
-        [classes.drawerClose]: !drawerState,
-      })}
+      variant={smallDevice ? 'temporary' : 'permanent'}
+      {...(
+        smallDevice && {
+          open: drawerState,
+          onClose: () => dispatch(changeDrawerState(!drawerState)),
+        }
+      )}
+      className={
+        smallDevice
+          ? classes.drawer
+          : clsx(classes.drawer, {
+            [classes.drawerOpen]: drawerState,
+            [classes.drawerClose]: !drawerState,
+          })
+      }
       classes={{
-        paper: clsx({
-          [classes.drawerOpen]: drawerState,
-          [classes.drawerClose]: !drawerState,
-        }),
+        paper: smallDevice
+          ? classes.drawerOpen
+          : clsx({
+            [classes.drawerOpen]: drawerState,
+            [classes.drawerClose]: !drawerState,
+          }),
       }}
     >
       <div className={classes.toolbar}>
         <IconButton onClick={() => dispatch(changeDrawerState(!drawerState))}>
-          {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          {
+            smallDevice
+              ? <CloseIcon />
+              : drawerState
+                && (theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />)
+          }
         </IconButton>
       </div>
-
-      <Divider />
 
       <List>
         {
@@ -97,7 +114,15 @@ export function Drawer({
               selected={item.url === activeMenu}
               onClick={() => dispatch(changeActiveMenu(item.url))}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemIcon
+                {...(
+                  !drawerState && {
+                    className: classes.collapseButton,
+                  }
+                )}
+              >
+                {item.icon}
+              </ListItemIcon>
               <ListItemText primary={item.name} />
             </ListItem>
           ))
