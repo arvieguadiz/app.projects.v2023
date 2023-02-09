@@ -9,9 +9,12 @@ import {
   AppBar,
   IconButton,
   Toolbar,
-  Typography
+  Typography,
+  useMediaQuery,
+  useScrollTrigger
 } from '@material-ui/core';
 import {
+  Brightness4 as Brightness4Icon,
   Brightness7 as Brightness7Icon,
   Menu as MenuIcon,
 } from '@material-ui/icons';
@@ -44,40 +47,58 @@ export function Header({
   useInjectSaga({ key: 'header', saga });
   
   const classes = useStyles();
+  const smallDevice = useMediaQuery((theme) => theme.breakpoints.down('xs'));
+
+  const ElevationScroll = ({ children }) => {
+    const trigger = useScrollTrigger({
+      disableHysteresis: true,
+      threshold: 0,
+      target: undefined,
+    });
+
+    return React.cloneElement(children, {
+      elevation: trigger ? 4 : 0,
+      color: trigger ? 'inherit' : 'transparent',
+    });
+  };
 
   return (
-    <AppBar
-      position="fixed"
-      className={clsx(classes.appBar, {
-        [classes.appBarShift]: drawerState,
-      })}
-    >
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={() => dispatch(changeDrawerState(!drawerState))}
-          edge="start"
-          className={clsx(classes.menuButton, {
-            [classes.hide]: drawerState,
-          })}
-        >
-          <MenuIcon />
-        </IconButton>
-        
-        <Typography variant="h6" noWrap className={classes.title}>
-          Welcome!
-        </Typography>
+    <ElevationScroll>
+      <AppBar
+        className={
+          smallDevice
+            ? classes.appBar
+            : clsx(classes.appBar, {
+              [classes.appBarShift]: drawerState,
+            })
+        }
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={() => dispatch(changeDrawerState(!drawerState))}
+            className={clsx(classes.menuButton, {
+              [classes.hide]: drawerState,
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
+          
+          <Typography variant="h6" noWrap className={classes.title}>
+            Welcome!
+          </Typography>
 
-        <IconButton
-          color="inherit"
-          edge="end"
-          onClick={() => dispatch(changeTheme(theme === 'dark' ? 'light' : 'dark'))}
-        >
-          <Brightness7Icon />
-        </IconButton>
-      </Toolbar>
-    </AppBar>
+          <IconButton
+            color="inherit"
+            edge="end"
+            onClick={() => dispatch(changeTheme(theme === 'dark' ? 'light' : 'dark'))}
+          >
+            {theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+    </ElevationScroll>
     // <FormattedMessage {...messages.header} />
   );
 }
