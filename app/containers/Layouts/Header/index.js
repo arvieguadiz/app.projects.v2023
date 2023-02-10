@@ -57,21 +57,17 @@ export function Header({
     });
 
     return React.cloneElement(children, {
-      elevation: trigger ? 4 : 0,
-      color: trigger ? 'inherit' : 'transparent',
+      elevation: (trigger || !drawerState && !smallDevice) ? 4 : 0,
+      color: (trigger || !drawerState && !smallDevice) ? 'inherit' : 'transparent',
     });
   };
 
   return (
     <ElevationScroll>
       <AppBar
-        className={
-          smallDevice
-            ? classes.appBar
-            : clsx(classes.appBar, {
-              [classes.appBarShift]: drawerState,
-            })
-        }
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: drawerState && !smallDevice,
+        })}
       >
         <Toolbar>
           <IconButton
@@ -79,7 +75,7 @@ export function Header({
             edge="start"
             onClick={() => dispatch(changeDrawerState(!drawerState))}
             className={clsx(classes.menuButton, {
-              [classes.hide]: drawerState,
+              [classes.hide]: drawerState && !smallDevice,
             })}
           >
             <MenuIcon />

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   Drawer as DrawerMui,
   IconButton,
@@ -16,8 +16,8 @@ import {
 } from '@material-ui/core';
 import {
   Apps as AppsIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon,
   Close as CloseIcon,
   Home as HomeIcon,
   Settings as SettingsIcon,
@@ -66,6 +66,16 @@ export function Drawer({
   const theme = useTheme();
   const smallDevice = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
+  useEffect(() => {
+    const screenSizeChecker = async () => (
+      smallDevice
+        ? await dispatch(changeDrawerState(false))
+        : await dispatch(changeDrawerState(true))
+    );
+
+    screenSizeChecker();
+  }, [smallDevice]);
+
   return (
     <DrawerMui
       variant={smallDevice ? 'temporary' : 'permanent'}
@@ -75,21 +85,15 @@ export function Drawer({
           onClose: () => dispatch(changeDrawerState(!drawerState)),
         }
       )}
-      className={
-        smallDevice
-          ? classes.drawer
-          : clsx(classes.drawer, {
-            [classes.drawerOpen]: drawerState,
-            [classes.drawerClose]: !drawerState,
-          })
-      }
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: drawerState && !smallDevice,
+        [classes.drawerClose]: !drawerState && !smallDevice,
+      })}
       classes={{
-        paper: smallDevice
-          ? classes.drawerOpen
-          : clsx({
-            [classes.drawerOpen]: drawerState,
-            [classes.drawerClose]: !drawerState,
-          }),
+        paper: clsx(classes.drawerOpen, {
+          [classes.drawerOpen]: drawerState && !smallDevice,
+          [classes.drawerClose]: !drawerState && !smallDevice,
+        }),
       }}
     >
       <div className={classes.toolbar}>
@@ -97,8 +101,7 @@ export function Drawer({
           {
             smallDevice
               ? <CloseIcon />
-              : drawerState
-                && (theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />)
+              : theme.direction === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />
           }
         </IconButton>
       </div>
@@ -112,12 +115,16 @@ export function Drawer({
               component={Link}
               to={item.url}
               selected={item.url === activeMenu}
-              onClick={() => dispatch(changeActiveMenu(item.url))}
+              onClick={() => {
+                (smallDevice && item.url !== activeMenu)
+                  && dispatch(changeDrawerState(!drawerState));
+                dispatch(changeActiveMenu(item.url));
+              }}
             >
               <ListItemIcon
                 {...(
                   !drawerState && {
-                    className: classes.collapseButton,
+                    className: classes.collapsedItemIcon,
                   }
                 )}
               >
