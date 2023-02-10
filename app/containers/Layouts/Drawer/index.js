@@ -49,11 +49,22 @@ import saga from './saga';
 
 import useStyles from './styles';
 
-const menuList = [
-  { name: 'Home', url: '/', icon: <HomeIcon /> },
-  { name: 'Apps', url: '/apps', icon: <AppsIcon /> },
-  { name: 'Settings', url: '/settings', icon: <SettingsIcon /> },
-];
+const menuLists = {
+  menu1: [
+    { name: 'Home', url: '/', icon: <HomeIcon /> },
+    { name: 'Apps', url: '/apps', icon: <AppsIcon /> },
+  ],
+  menu2: null,
+  menu3: [
+    { name: 'Portfolio', url: '/portfolio', icon: <SettingsIcon />, new_tab: true },
+  ],
+  menu4: null,
+  menu5: [
+    { name: 'Settings', url: '/settings', icon: <SettingsIcon /> },
+    { name: 'Contact', url: '/contact', icon: <HomeIcon /> },
+    { name: 'About', url: '/about', icon: <AppsIcon /> },
+  ],
+};
 
 export function Drawer({
   dispatch,
@@ -109,35 +120,49 @@ export function Drawer({
 
       <Divider />
 
-      <List>
-        {
-          map(menuList, (item, index) => (
-            <ListItem
-              key={`item-${item.name}-${index}`}
-              button
-              component={Link}
-              to={item.url}
-              selected={item.url === activeMenu}
-              onClick={() => {
-                (smallDevice && item.url !== activeMenu)
-                  && dispatch(changeDrawerState(!drawerState));
-                dispatch(changeActiveMenu(item.url));
-              }}
-            >
-              <ListItemIcon
-                {...(
-                  !drawerState && {
-                    className: classes.collapsedItemIcon,
-                  }
-                )}
-              >
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.name} />
-            </ListItem>
-          ))
-        }
-      </List>
+      {
+        map(menuLists, (item, index) => (
+          item ? (
+            <List key={`item-${index}`}>
+              {
+                map(item, (obj, idx) => (
+                  <ListItem
+                    key={`item-${obj.name}-${idx}`}
+                    button
+                    component={Link}
+                    to={obj.url}
+                    {...(
+                      obj.new_tab ? ({
+                        target: '_blank',
+                      }) : ({
+                        selected: obj.url === activeMenu,
+                        onClick: () => {
+                          (smallDevice && obj.url !== activeMenu)
+                            && dispatch(changeDrawerState(!drawerState));
+                          dispatch(changeActiveMenu(obj.url));
+                        }
+                      })
+                    )}
+                  >
+                    <ListItemIcon
+                      {...(
+                        !drawerState && {
+                          className: classes.collapsedItemIcon,
+                        }
+                      )}
+                    >
+                      {obj.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={obj.name} />
+                  </ListItem>
+                ))
+              }
+            </List>
+          ) : (
+            <Divider key={`item-${index}`} />
+          )
+        ))
+      }
     </DrawerMui>
     // <FormattedMessage {...messages.header} />
   );
