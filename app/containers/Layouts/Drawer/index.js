@@ -85,21 +85,15 @@ export function Drawer({
           onClose: () => dispatch(changeDrawerState(!drawerState)),
         }
       )}
-      className={
-        smallDevice
-          ? classes.drawer
-          : clsx(classes.drawer, {
-            [classes.drawerOpen]: drawerState,
-            [classes.drawerClose]: !drawerState,
-          })
-      }
+      className={clsx(classes.drawer, {
+        [classes.drawerOpen]: drawerState && !smallDevice,
+        [classes.drawerClose]: !drawerState && !smallDevice,
+      })}
       classes={{
-        paper: smallDevice
-          ? classes.drawerOpen
-          : clsx({
-            [classes.drawerOpen]: drawerState,
-            [classes.drawerClose]: !drawerState,
-          }),
+        paper: clsx({
+          [classes.drawerOpen]: drawerState && !smallDevice,
+          [classes.drawerClose]: !drawerState && !smallDevice,
+        }),
       }}
     >
       <div className={classes.toolbar}>
