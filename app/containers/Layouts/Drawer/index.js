@@ -20,7 +20,10 @@ import {
   ArrowBack as ArrowBackIcon,
   ArrowForward as ArrowForwardIcon,
   Close as CloseIcon,
+  Email as EmailIcon,
+  Folder as FolderIcon,
   Home as HomeIcon,
+  Info as InfoIcon,
   Settings as SettingsIcon,
 } from '@material-ui/icons';
 import { useTheme } from '@material-ui/core/styles';
@@ -56,13 +59,13 @@ const menuLists = {
   ],
   menu2: null,
   menu3: [
-    { name: 'Portfolio', url: '/portfolio', icon: <SettingsIcon />, new_tab: true },
+    { name: 'Portfolio', url: '/portfolio', icon: <FolderIcon />, new_tab: true },
   ],
   menu4: null,
   menu5: [
     { name: 'Settings', url: '/settings', icon: <SettingsIcon /> },
-    { name: 'Contact', url: '/contact', icon: <HomeIcon /> },
-    { name: 'About', url: '/about', icon: <AppsIcon /> },
+    { name: 'Contact', url: '/contact', icon: <EmailIcon /> },
+    { name: 'About', url: '/about', icon: <InfoIcon /> },
   ],
 };
 
