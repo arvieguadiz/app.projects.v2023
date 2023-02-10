@@ -131,7 +131,7 @@ export function Drawer({
               <ListItemIcon
                 {...(
                   !drawerState && {
-                    className: classes.collapseButton,
+                    className: classes.collapsedItemIcon,
                   }
                 )}
               >
