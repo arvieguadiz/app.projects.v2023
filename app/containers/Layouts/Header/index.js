@@ -57,8 +57,8 @@ export function Header({
     });
 
     return React.cloneElement(children, {
-      elevation: trigger ? 4 : 0,
-      color: trigger ? 'inherit' : 'transparent',
+      elevation: (trigger || !drawerState && !smallDevice) ? 4 : 0,
+      color: (trigger || !drawerState && !smallDevice) ? 'inherit' : 'transparent',
     });
   };
 

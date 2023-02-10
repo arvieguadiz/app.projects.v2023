@@ -90,7 +90,7 @@ export function Drawer({
         [classes.drawerClose]: !drawerState && !smallDevice,
       })}
       classes={{
-        paper: clsx({
+        paper: clsx(classes.drawerOpen, {
           [classes.drawerOpen]: drawerState && !smallDevice,
           [classes.drawerClose]: !drawerState && !smallDevice,
         }),
@@ -101,8 +101,7 @@ export function Drawer({
           {
             smallDevice
               ? <CloseIcon />
-              : drawerState
-                && (theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />)
+              : theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />
           }
         </IconButton>
       </div>
