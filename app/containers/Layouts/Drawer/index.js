@@ -6,6 +6,7 @@
 
 import React, { memo, useEffect } from 'react';
 import {
+  Divider,
   Drawer as DrawerMui,
   IconButton,
   List,
@@ -105,6 +106,8 @@ export function Drawer({
           }
         </IconButton>
       </div>
+
+      <Divider />
 
       <List>
         {
