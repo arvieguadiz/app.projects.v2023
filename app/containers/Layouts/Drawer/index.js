@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   Drawer as DrawerMui,
   IconButton,
@@ -66,6 +66,16 @@ export function Drawer({
   const theme = useTheme();
   const smallDevice = useMediaQuery((theme) => theme.breakpoints.down('xs'));
 
+  useEffect(() => {
+    const screenSizeChecker = async () => (
+      smallDevice
+        ? await dispatch(changeDrawerState(false))
+        : await dispatch(changeDrawerState(true))
+    );
+
+    screenSizeChecker();
+  }, [smallDevice]);
+
   return (
     <DrawerMui
       variant={smallDevice ? 'temporary' : 'permanent'}
@@ -112,7 +122,11 @@ export function Drawer({
               component={Link}
               to={item.url}
               selected={item.url === activeMenu}
-              onClick={() => dispatch(changeActiveMenu(item.url))}
+              onClick={() => {
+                (smallDevice && item.url !== activeMenu)
+                  && dispatch(changeDrawerState(!drawerState));
+                dispatch(changeActiveMenu(item.url));
+              }}
             >
               <ListItemIcon
                 {...(
