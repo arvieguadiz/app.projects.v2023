@@ -121,8 +121,6 @@ export function Drawer({
         </IconButton>
       </div>
 
-      <Divider />
-
       {
         map(menuLists, (item, index) => (
           item ? (
