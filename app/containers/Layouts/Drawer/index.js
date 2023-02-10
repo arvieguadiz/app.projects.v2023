@@ -16,8 +16,8 @@ import {
 } from '@material-ui/core';
 import {
   Apps as AppsIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon,
   Close as CloseIcon,
   Home as HomeIcon,
   Settings as SettingsIcon,
@@ -101,7 +101,7 @@ export function Drawer({
           {
             smallDevice
               ? <CloseIcon />
-              : theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />
+              : theme.direction === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />
           }
         </IconButton>
       </div>
